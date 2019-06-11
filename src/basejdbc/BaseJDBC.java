@@ -6,43 +6,52 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
- * declaracion de la clase BAseJDBC
+ * declaracion de la clase BaseJDBC
  * @author Celso
  * @version 11/6/2019
  */
 public class BaseJDBC {
  
-  
+    public static Statement conexion(){
+        Statement st = null;
+        try {
+            Connection conn = null;
+            String url = null;
+            
+            /**
+             * @param conn
+             * @param url
+             *
+             */       
+            url = "jdbc:sqlite:primera clase.db";   
+            conn = DriverManager.getConnection(url);
+            st=conn.createStatement();
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseJDBC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return st;
+    }
      /**
       * Método que crea la tabla
       * @return Conn 
       * retorna la conexion creada con la base de datos
       */
-    public static Connection crearTabla() {
-     /**declaracion de atributos
-      * 
-      */
-    Connection conn = null;
-    String url = null;
-    Statement st = null;
-    ResultSet rs;
-    /**
-    * @param conn,url,st,rs    
-    *
-    */
-    
+    public static void crearTabla() {
         try {
-            url = "jdbc:sqlite:primera clase.db";            
-            conn = DriverManager.getConnection(url);         
-        st=conn.createStatement();
-        st.executeUpdate("CREATE TABLE IF NOT EXISTS TABLA (columna1 int PRIMARY KEY,columna2 varchar UNIQUE,columna3 varchar UNIQUE)");
-           
-        } 
-         catch (SQLException ex) {
+            /**declaracion de atributos
+             *
+             */
+            
+          
+            conexion().executeUpdate("CREATE TABLE IF NOT EXISTS TABLA (columna1 int ,columna2 varchar,columna3 varchar)");
+        } catch (SQLException ex) {
             Logger.getLogger(BaseJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
+         
+    }
           
 //        finally {
 //            try {
@@ -54,8 +63,7 @@ public class BaseJDBC {
 //                System.out.println("Error de creación de la tabla (TABLA)"+ex.getMessage());
 //            }
 //        }
-   return conn;   
-    }
+ 
     
     /**
       * Método que inserta valores en la tabla
@@ -63,22 +71,21 @@ public class BaseJDBC {
       * @param columna1 Valor numérico para ingresar en la tabla
       * @param columna2 Cadena de texto para ingresar en la tabla
       * @param columna3 Cadena de texto para lo mismo
+     * @return 
       */
-    public static int insertar(Connection co,int columna1,String columna2,String columna3){
-        int a = 0;
+    public static int insertar(int columna1,String columna2,String columna3){
+        int rs = 0;
         try {
-            Statement st = co.createStatement();
-            st.executeUpdate("INSERT INTO TABLA VALUES("+columna1+",'"+columna2+"','"+columna3+"')");
+         
+            rs = conexion().executeUpdate("INSERT INTO TABLA VALUES("+columna1+",'"+columna2+"','"+columna3+"')");
+            System.out.println(rs);
         } catch(org.sqlite.SQLiteException error){
             System.out.println("Problema entre valores, asegúrese de que son correctos \no tiene posibilidad para ello\n"+error);
         }
         catch (SQLException ex) {
             Logger.getLogger(BaseJDBC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        a++;
-        return a;
+        }       
+      return rs;
     }
     
      /**
@@ -86,14 +93,27 @@ public class BaseJDBC {
       * @param co Reciba la conexion creada en crearTabla()
       * @param columna1 Valor numérico para buscar el registro a borrar
       */
-    public static void borrar(Connection co,int columna1){
+    public static int borrar(int columna1){
+        int rs = 0;
         try {
-            Statement st = co.createStatement();
-            st.executeUpdate("DELETE FROM TABLA WHERE columna1="+columna1+"");
+           
+            rs = conexion().executeUpdate("DELETE FROM TABLA WHERE columna1="+columna1+"");
         } catch (SQLException ex) {
             System.out.println("Lo siento, problema con la sentencia sql\n"+ex);
         }
-        
+        System.out.println(rs);
+        return rs;
+    }
+    
+    public int modificar(int valor1,String valor2,String valor3){
+        int rs = 0;
+        try {
+           
+            rs = conexion().executeUpdate("UPDATE TABLA SET columna1= 'Alfred Schmidt',columna2=''WHERE columna1 ="+valor1+" and columna2='"+valor2+"' and columna3='"+valor3+"'");
+        } catch (SQLException ex) {
+            System.out.println("Lo siento, problema con la sentencia sql\n"+ex);
+        }
+        return rs;
     }
     
     
@@ -102,9 +122,9 @@ public class BaseJDBC {
      * @param args Método principal por los que pasan el resto
      */
     public static void main(String[] args) {
-        crearTabla();
-      //insertar(crearTabla(),2,"Celos","Pito");
-      //Sborrar(crearTabla(),2);
+       crearTabla();
+       //insertar(4,"aasd","sewfs");
+       borrar(2);
     }
     
 }
