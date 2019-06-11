@@ -4,9 +4,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  * declaracion de la clase BaseJDBC
@@ -63,11 +63,30 @@ public class BaseJDBC {
         }
           
      }
+     public ArrayList consultar(){
+       ArrayList a = null;
+        try {
+            ResultSet rs;
+            rs=conexion().executeQuery("SELECT * FROM TABLA");
+            a= new ArrayList();
+            while(rs.next()){
+            a.add(rs.getInt("columna1"));
+            a.add(rs.getString("columna2"));
+            a.add(rs.getString("columna3"));
+            }
+            
+            
+        } catch (SQLException ex) {
+            System.out.println("Error al consultar la tabla\n"+ex);
+        }
+              
+        return a;       
+         
+     }
  
     
     /**
       * Método que inserta valores en la tabla
-      * @param co Reciba la conexion creada en crearTabla()
       * @param columna1 Valor numérico para ingresar en la tabla
       * @param columna2 Cadena de texto para ingresar en la tabla
       * @param columna3 Cadena de texto para lo mismo
@@ -88,7 +107,6 @@ public class BaseJDBC {
     
      /**
       * Método que elimina valores de la tabla
-      * @param co Reciba la conexion creada en crearTabla()
       * @param columna1 Valor numérico para buscar el registro a borrar
       */
     public int borrar(int columna1){
@@ -103,28 +121,22 @@ public class BaseJDBC {
         return rs;
     }
     
-    public int modificar(int valor1,String valor2,String valor3,String fin1){
-        int rs = 0;
+    
+     /**
+      * Método que modifica los valores de la tabla
+      * @param valor1 Valor numérico para dar el nuevo valor
+      * @param valor2 Cadena de texto para dar nuevo valor
+      * @param valor3 Cadena de texto para dar nuevo valor
+      * @param fin1 Número que perteneze al registro que se quiere modificar
+     * @return 
+      */
+    public int modificar(int valor1,String valor2,String valor3,int fin1){
+        int rs = 0;       
         try {           
             rs = conexion().executeUpdate("UPDATE TABLA SET columna1 ="+valor1 +",columna2 ='"+valor2+"', columna3 = '"+valor3+"' WHERE columna1 ="+fin1);
         } catch (SQLException ex) {
             System.out.println("Lo siento, problema con la sentencia sql\n"+ex);
         }
         return rs;
-    }
-    
-    
-  
-    /**
-     * @param args Método principal por los que pasan el resto
-     */
-    public static void main(String[] args) {
-        BaseJDBC a= new BaseJDBC();
-        a.crearTabla();
-       //crearTabla();
-       //insertar(4,"aasd","sewfs");
-       //borrar(2);
-       //modificar(5,"Celos","Pito");
-    }
-    
+    }   
 }
