@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class BaseJDBC {
  
-    public static Statement conexion(){
+    public Statement conexion(){
         Statement st = null;
         try {
             Connection conn = null;
@@ -39,13 +39,12 @@ public class BaseJDBC {
       * @return Conn 
       * retorna la conexion creada con la base de datos
       */
-    public static void crearTabla() {
+    public void crearTabla() {
         try {
             /**declaracion de atributos
              *
              */
             
-          
             conexion().executeUpdate("CREATE TABLE IF NOT EXISTS TABLA (columna1 int ,columna2 varchar,columna3 varchar)");
         } catch (SQLException ex) {
             Logger.getLogger(BaseJDBC.class.getName()).log(Level.SEVERE, null, ex);
@@ -73,7 +72,7 @@ public class BaseJDBC {
       * @param columna3 Cadena de texto para lo mismo
      * @return 
       */
-    public static int insertar(int columna1,String columna2,String columna3){
+    public int insertar(int columna1,String columna2,String columna3){
         int rs = 0;
         try {
          
@@ -93,7 +92,7 @@ public class BaseJDBC {
       * @param co Reciba la conexion creada en crearTabla()
       * @param columna1 Valor numérico para buscar el registro a borrar
       */
-    public static int borrar(int columna1){
+    public int borrar(int columna1){
         int rs = 0;
         try {
            
@@ -105,11 +104,10 @@ public class BaseJDBC {
         return rs;
     }
     
-    public int modificar(int valor1,String valor2,String valor3){
+    public int modificar(int valor1,String valor2,String valor3,String fin1){
         int rs = 0;
-        try {
-           
-            rs = conexion().executeUpdate("UPDATE TABLA SET columna1= 'Alfred Schmidt',columna2=''WHERE columna1 ="+valor1+" and columna2='"+valor2+"' and columna3='"+valor3+"'");
+        try {           
+            rs = conexion().executeUpdate("UPDATE TABLA SET columna1 ="+valor1 +",columna2 ='"+valor2+"', columna3 = '"+valor3+"' WHERE columna1 ="+fin1);
         } catch (SQLException ex) {
             System.out.println("Lo siento, problema con la sentencia sql\n"+ex);
         }
@@ -122,9 +120,12 @@ public class BaseJDBC {
      * @param args Método principal por los que pasan el resto
      */
     public static void main(String[] args) {
-       crearTabla();
+        BaseJDBC a= new BaseJDBC();
+        a.crearTabla();
+       //crearTabla();
        //insertar(4,"aasd","sewfs");
-       borrar(2);
+       //borrar(2);
+       //modificar(5,"Celos","Pito");
     }
     
 }
