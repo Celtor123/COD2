@@ -39,29 +39,30 @@ public class BaseJDBC {
       * @return Conn 
       * retorna la conexion creada con la base de datos
       */
-    public void crearTabla() {
+    public int crearTabla() {
+        int st=0;
         try {
             /**declaracion de atributos
              *
              */
-            
-            conexion().executeUpdate("CREATE TABLE IF NOT EXISTS TABLA (columna1 int ,columna2 varchar,columna3 varchar)");
+           //st=conexion().executeUpdate("drop table TABLA");
+           st = conexion().executeUpdate("CREATE TABLE IF NOT EXISTS TABLA (columna1 int ,columna2 varchar(15),columna3 varchar(16))");
         } catch (SQLException ex) {
-            Logger.getLogger(BaseJDBC.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error a la hora de crear la tabla"+ex);
         }
-         
+        return st;         
     }
+    
+    
+     public void fin(){
+        try {
+            conexion().close();
+            conexion().getConnection().close();
+        } catch (SQLException ex) {
+            System.out.println("Error al cerrar la conexion"+ex);
+        }
           
-//        finally {
-//            try {
-//                if (conn != null) {
-//                    conn.close();
-//                    st.close();
-//                }
-//            } catch (SQLException ex) {
-//                System.out.println("Error de creación de la tabla (TABLA)"+ex.getMessage());
-//            }
-//        }
+     }
  
     
     /**
@@ -74,10 +75,8 @@ public class BaseJDBC {
       */
     public int insertar(int columna1,String columna2,String columna3){
         int rs = 0;
-        try {
-         
-            rs = conexion().executeUpdate("INSERT INTO TABLA VALUES("+columna1+",'"+columna2+"','"+columna3+"')");
-            System.out.println(rs);
+        try {         
+            rs = conexion().executeUpdate("INSERT INTO TABLA VALUES("+columna1+",'"+columna2+"','"+columna3+"')");           
         } catch(org.sqlite.SQLiteException error){
             System.out.println("Problema entre valores, asegúrese de que son correctos \no tiene posibilidad para ello\n"+error);
         }
