@@ -5,8 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * declaracion de la clase BaseJDBC
@@ -14,46 +12,49 @@ import java.util.logging.Logger;
  * @version 11/6/2019
  */
 public class BaseJDBC {
- 
+    /**
+     * Método que genera la conexión del
+     * programa con la base de datos
+     * Url  Path donde se encuentra la base sqlite  
+     * @return Statement st
+     * 
+     */
     public Statement conexion(){
         Statement st = null;
         try {
             Connection conn = null;
-            String url = null;
-            
-            /**
-             * @param conn
-             * @param url
-             *
-             */       
+            String url = null;       
             url = "jdbc:sqlite:primera clase.db";   
             conn = DriverManager.getConnection(url);
             st=conn.createStatement();
         } catch (SQLException ex) {
-            Logger.getLogger(BaseJDBC.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Conexión fallida"+ex);
         }
+       
         return st;
     }
      /**
-      * Método que crea la tabla
-      * @return Conn 
-      * retorna la conexion creada con la base de datos
+      * Método que crea la tabla 
+      * retorna si la tabla está creada con valor 1 o 0
+     * @return Integer sy
       */
     public int crearTabla() {
-        int st=0;
+        int sy=0;
         try {
             /**declaracion de atributos
              *
              */
            //st=conexion().executeUpdate("drop table TABLA");
-           st = conexion().executeUpdate("CREATE TABLE IF NOT EXISTS TABLA (columna1 int ,columna2 varchar(15),columna3 varchar(16))");
+           sy = conexion().executeUpdate("CREATE TABLE IF NOT EXISTS TABLA (columna1 int ,columna2 varchar(15),columna3 varchar(16))");
         } catch (SQLException ex) {
             System.out.println("Error a la hora de crear la tabla"+ex);
         }
-        return st;         
+        return sy;         
     }
     
-    
+     /**
+      * Método en el cual se finaliza la conexión
+      */
      public void fin(){
         try {
             conexion().close();
@@ -63,6 +64,12 @@ public class BaseJDBC {
         }
           
      }
+     
+     /**
+      *  rs ResultSet que recorre registro a registro toda la tabla
+      *  a ArrayList que guarda el contenido del resultset
+      * @return  
+      */
      public ArrayList consultar(){
        ArrayList a = null;
         try {
@@ -73,9 +80,7 @@ public class BaseJDBC {
             a.add(rs.getInt("columna1"));
             a.add(rs.getString("columna2"));
             a.add(rs.getString("columna3"));
-            }
-            
-            
+            }                  
         } catch (SQLException ex) {
             System.out.println("Error al consultar la tabla\n"+ex);
         }
@@ -90,17 +95,18 @@ public class BaseJDBC {
       * @param columna1 Valor numérico para ingresar en la tabla
       * @param columna2 Cadena de texto para ingresar en la tabla
       * @param columna3 Cadena de texto para lo mismo
-     * @return 
+     * @return rs Integer con el cual cuenta las filas registradas  
       */
     public int insertar(int columna1,String columna2,String columna3){
         int rs = 0;
+        try{
         try {         
             rs = conexion().executeUpdate("INSERT INTO TABLA VALUES("+columna1+",'"+columna2+"','"+columna3+"')");           
-        } catch(org.sqlite.SQLiteException error){
+        } catch(java.lang.NumberFormatException error){
             System.out.println("Problema entre valores, asegúrese de que son correctos \no tiene posibilidad para ello\n"+error);
-        }
+        }}
         catch (SQLException ex) {
-            Logger.getLogger(BaseJDBC.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al insertar en la tabla\n"+ex);
         }       
       return rs;
     }
@@ -108,6 +114,8 @@ public class BaseJDBC {
      /**
       * Método que elimina valores de la tabla
       * @param columna1 Valor numérico para buscar el registro a borrar
+      * rs Integer con el cual cuenta las filas eliminadas
+     * @return Integer rs
       */
     public int borrar(int columna1){
         int rs = 0;
@@ -128,7 +136,7 @@ public class BaseJDBC {
       * @param valor2 Cadena de texto para dar nuevo valor
       * @param valor3 Cadena de texto para dar nuevo valor
       * @param fin1 Número que perteneze al registro que se quiere modificar
-     * @return 
+     * @return Integer rs
       */
     public int modificar(int valor1,String valor2,String valor3,int fin1){
         int rs = 0;       

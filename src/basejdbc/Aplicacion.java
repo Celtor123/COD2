@@ -3,9 +3,19 @@ package basejdbc;
 
 import java.util.Iterator;
 import javax.swing.JOptionPane;
-
+/** 
+    * Clase donde de ejecuta el programa
+    * Es la subclase de BaseJDBC 
+    * @author Celso
+    * @version 11/6/2019
+    */
 public class Aplicacion extends BaseJDBC{
    
+    /**
+     * Método en el que a través de los métodos creados anteriormente
+     * en la subclase, las mostramos al usuario con JOptionPane las
+     * posibilidades y resultados de estos
+     */
     public void aplicacion(){
          
   String[] carreras = {
@@ -85,11 +95,12 @@ public class Aplicacion extends BaseJDBC{
     }
     
     /**
-     * @param args Método principal por los que pasan el resto
+     * @param args Método principal donde se ejecuta el programa
      */
     public static void main(String[] args) {
        Aplicacion a= new Aplicacion();
        a.aplicacion();
+
     
     }
 }
