@@ -7,12 +7,28 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * declaracion de la clase BAseJDBC
+ * @author Celso
+ * @version 11/6/2019
+ */
 public class BaseJDBC {
-public static boolean crearTabla() {
-    Connection conn = null;
-    String url = null;
-    Statement st;
-    ResultSet rs;
+ //declaracion de atributos
+    static Connection conn = null;
+    static String url = null;
+    static Statement st;
+    static ResultSet rs;
+  
+     /**
+      * Método que crea la tabla
+      * @return 
+      */
+    public static boolean crearTabla() {
+   
+    /**
+    * @param conn,url,st,rs    
+    *
+    */
      boolean execute = false;
         try {
        
@@ -21,7 +37,6 @@ public static boolean crearTabla() {
             // create a connection to the database
             conn = DriverManager.getConnection(url);
             
-            System.out.println("Connection to SQLite has been established.");
             
         st=conn.createStatement();
         st.executeUpdate("CREATE TABLE IF NOT EXISTS TABLA (columna1 int,columna2 varchar,columna3 varchar)");
@@ -30,7 +45,7 @@ public static boolean crearTabla() {
          catch (SQLException ex) {
             Logger.getLogger(BaseJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
-//            
+          
         finally {
             try {
                 if (conn != null) {
@@ -44,9 +59,9 @@ public static boolean crearTabla() {
     System.out.println(execute);
         return execute;
 }
-//    
+  
     /**
-     * @param args the command line arguments
+     * @param args Método principal por los que pasan el resto
      */
     public static void main(String[] args) {
         crearTabla();
