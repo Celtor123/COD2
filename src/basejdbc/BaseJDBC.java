@@ -21,14 +21,17 @@ public class BaseJDBC {
      */
     public Statement conexion(){
         Statement st = null;
-        try {
+        try{
             Connection conn = null;
             String url = null;       
             url = "jdbc:sqlite:primera clase.db";   
             conn = DriverManager.getConnection(url);
             st=conn.createStatement();
-        } catch (SQLException ex) {
-            System.out.println("Conexión fallida"+ex);
+        }         
+        
+        catch (SQLException ex) {
+            System.out.println("Conexión fallida "+ex);
+            //Por favor inserte el driver en la libreria 
         }
        
         return st;
