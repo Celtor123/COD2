@@ -10,30 +10,40 @@ import javax.swing.JOptionPane;
     * @version 11/6/2019
     */
 public class Aplicacion extends BaseJDBC{
-   
+   String resp;
     /**
      * Método en el que a través de los métodos creados anteriormente
      * en la subclase, las mostramos al usuario con JOptionPane las
      * posibilidades y resultados de estos
      */
     public void aplicacion(){
-         
+         try{
   String[] carreras = {
             "Crear la tabla",
+            "Borrar la tabla",
             "Insertar",
             "Borrar",
             "Consultar",
             "Modificar",
+            "Terminar"
         };
-       
-        String resp = (String) JOptionPane.showInputDialog(null, "Seleccione una operación", "Menu Principal", JOptionPane.DEFAULT_OPTION, null, carreras, carreras[0]);
-        System.out.println(resp);
+  
+       do{           
+        resp = (String) JOptionPane.showInputDialog(null, "Seleccione una operación", "Menu Principal", JOptionPane.DEFAULT_OPTION, null, carreras, carreras[0]);
+        //System.out.println(resp); Era para pruebas          
+        
         switch(resp){
+            
             case "Crear la tabla":
                 crearTabla();
                 System.out.println(crearTabla()+"Tabla creada");
                 break;
                 
+            case "Borrar la tabla":
+                borrarTabla();
+                System.out.println(crearTabla()+"Tabla Borrada");
+                break;
+                    
             case "Insertar":
                 try{
                 int co1=Integer.parseInt(JOptionPane.showInputDialog(null,"Inserte el valor de la columna 1(Un Int)","Nuevo Registro",0));
@@ -74,7 +84,7 @@ public class Aplicacion extends BaseJDBC{
                 fin();
                 break;
                 
-                
+            
             case "Modificar":
                 try{
                 int col1=Integer.parseInt((String) JOptionPane.showInputDialog(null,"Inserte el valor de la columna 1(Un Int)","Variación Registro",0,null,null,null));
@@ -86,14 +96,21 @@ public class Aplicacion extends BaseJDBC{
                     System.out.println("Error:"+r);
                 }
                 catch(java.lang.NumberFormatException e){
-                System.out.println("Por favor meta un valor válido \n"+e);}
-               
+                System.out.println("Por favor meta un valor válido \n"+e);}               
                 fin();
                 break;
                 
+            case "Terminar":
+                fin();
+                System.out.println("Hasta luego");
+                break;
         }
+        
+        }while(!"Terminar".equals(resp));
+    }catch(java.lang.NullPointerException t){
+             System.out.println("Chao");
     }
-    
+    }
     /**
      * @param args Método principal donde se ejecuta el programa
      */

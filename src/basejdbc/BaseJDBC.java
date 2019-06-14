@@ -5,13 +5,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * declaracion de la clase BaseJDBC
  * @author Celso
- * @version 11/6/2019
+ * @version 14/6/2019
  */
 public class BaseJDBC {
+    
     /**
      * Método que genera la conexión del
      * programa con la base de datos
@@ -36,25 +39,44 @@ public class BaseJDBC {
        
         return st;
     }
+    
      /**
       * Método que crea la tabla 
       * retorna si la tabla está creada con valor 1 o 0
      * @return Integer sy
       */
     public int crearTabla() {
-        int sy=0;
+        int sy = 0;
         try {
             /**declaracion de atributos
              *
              */
-           //st=conexion().executeUpdate("drop table TABLA");
-           sy = conexion().executeUpdate("CREATE TABLE IF NOT EXISTS TABLA (columna1 int ,columna2 varchar(15),columna3 varchar(16))");
-        } catch (SQLException ex) {
+            sy = conexion().executeUpdate("CREATE TABLE IF NOT EXISTS TABLA (columna1 int ,columna2 varchar(15),columna3 varchar(16))");
+            System.out.println(sy);
+        } catch (SQLException ex) {            
             System.out.println("Error a la hora de crear la tabla"+ex);
         }
         return sy;         
     }
     
+    /**
+      * Método que borra la tabla 
+      * retorna si la tabla está creada con valor 1 o 0
+     * @return Integer sy
+      */
+    public int borrarTabla() {
+        int sy = 0;
+        try {
+            /**declaracion de atributos
+             *
+             */
+            sy= conexion().executeUpdate("Drop table IF EXISTS TABLA");
+            System.out.println(sy);
+        } catch (SQLException ex) {           
+            System.out.println("Error a la hora de borrar la tabla");
+           }
+        return sy;         
+    }
      /**
       * Método en el cual se finaliza la conexión
       */
@@ -92,7 +114,7 @@ public class BaseJDBC {
          
      }
  
-    
+
     /**
       * Método que inserta valores en la tabla
       * @param columna1 Valor numérico para ingresar en la tabla
